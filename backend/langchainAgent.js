@@ -31,10 +31,11 @@ User Question:
 `);
 
 const fakeLLM = new RunnableLambda({
-  func: async ({ prompt }) => ({
-    content: `🤖 Here's a helpful response based on your notes:\n\n${prompt}`,
+  func: async ({ context, question }) => ({
+    answer: `🤖 Based on your notes, here's a helpful response:\n\n${context}\n\nFor your question: "${question}"`,
   }),
 });
+
 
 // This is the actual chain used for document combination
 const combineDocsChain = RunnableSequence.from([

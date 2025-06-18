@@ -7,14 +7,14 @@ import ChatAssistant from './components/ChatAssistant';
 
 const App = () => {
   const learnedTopics = [
-    'React Basics',
-    'Component Lifecycle',
-    'State Management',
-    'Hooks',
-    'Context API',
-    'Routing with React Router',
-    'Styling Components',
-    'Performance Optimization'
+    'General interview preparation',
+    'JavaScript Fundamentals',
+    'merge sort algorithm',
+    'Quick sort algorithm',
+    'Bubble sort algorithm',
+    'Linear search algorithm',
+    'Binary search algorithm',
+    'Data Structures',
   ];
 
   return (

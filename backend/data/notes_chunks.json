@@ -25,7 +25,7 @@
   "Category: Common Interview Questions\nQ: What are your strengths?\nA: Mention strengths relevant to the job (e.g., problem-solving, adaptability, communication) and provide a brief example of how each has helped in a professional context. Use keywords from the job description where possible.",
   "Category: Common Interview Questions\nQ: What is your biggest weakness?\nA: Choose a real but not mission-critical weakness. Explain how you recognized it and the steps you're taking to improve. Show self-awareness and commitment to growth.",
   "Category: Common Interview Questions\nQ: How do you handle pressure and tight deadlines?\nA: Share specific strategies such as breaking down tasks, setting priorities, asking for support when needed, and maintaining focus. Provide a past example if possible.",
-  "Category: Common Interview Questions\nQ: Where do you see yourself in 3-5 years?\nA: Demonstrate ambition and loyalty. Express your desire to grow within the company and take on more responsibility. Research the company’s growth paths and refer to those if applicable.",
+  "Category: Common Interview Questions\nQ: Where do you see yourself in 3–5 years?\nA: Demonstrate ambition and loyalty. Express your desire to grow within the company and take on more responsibility. Research the company’s growth paths and refer to those if applicable.",
   "Category: Common Interview Questions\nQ: How do you respond to questions on topics you have no experience with?\nA: Don’t say 'I don’t know' directly. Instead, mention how you would approach learning it or relate it to something you do know. This shows a growth mindset and resourcefulness.",
   "Category: Common Interview Questions\nQ: How would you answer personality questions like 'What animal would you be and why?'\nA: These questions aim to reveal your values and self-perception. Choose traits relevant to the role — e.g., 'an owl for wisdom' or 'a dolphin for collaboration.' Be creative but purposeful.",
   "Category: Asking Questions as an Interviewee\nContent: Always prepare 2–3 thoughtful questions to ask at the end — it shows you're invested and thinking long-term.",
@@ -46,5 +46,17 @@
   "Category: Soft Skills (Evaluated using CAR Framework - Circumstance, Action, Result)\nContent: Adaptability — adjusting quickly to change or uncertainty.",
   "Category: Soft Skills (Evaluated using CAR Framework - Circumstance, Action, Result)\nContent: Growth mindset — belief in your ability to improve through effort.",
   "Category: Soft Skills (Evaluated using CAR Framework - Circumstance, Action, Result)\nContent: Communication — clarity, conciseness, and empathy in expression.",
-  "Category: Soft Skills (Evaluated using CAR Framework - Circumstance, Action, Result)\nContent: Teamwork — ability to collaborate and contribute in group settings."
+  "Category: Soft Skills (Evaluated using CAR Framework - Circumstance, Action, Result)\nContent: Teamwork — ability to collaborate and contribute in group settings.",
+  "Category: JavaScript Fundamentals\nContent: JavaScript is a high-level, interpreted scripting language used primarily to create interactive effects within web browsers. It supports functions, objects, dynamic typing, and event-driven programming.",
+  "Category: JavaScript Fundamentals\nContent: Key JavaScript concepts include variables (var, let, const), functions (declaration and expression), objects, arrays, loops (for, while), and conditionals (if/else, switch).",
+  "Category: JavaScript Fundamentals\nContent: JavaScript runs in the browser (client-side), but can also be used on the server via Node.js.",
+  "Category: Data Structures\nContent: A data structure is a specialized way of organizing and storing data in a computer so it can be accessed and modified efficiently. Examples include arrays, stacks, queues, linked lists, trees, and graphs.",
+  "Category: Data Structures\nContent: Arrays in JavaScript are ordered collections of items. They can store any data type and are indexed numerically starting at 0.",
+  "Category: Data Structures\nContent: A Stack is a LIFO (Last In, First Out) data structure. You can push items to the top and pop items from the top. JavaScript arrays can simulate stacks using push() and pop().",
+  "Category: Sorting Algorithms\nContent: Bubble Sort is a simple comparison-based algorithm that repeatedly steps through the list, compares adjacent items and swaps them if they are in the wrong order. Time complexity: O(n²).",
+  "Category: Sorting Algorithms\nContent: Merge Sort is a divide-and-conquer algorithm that splits an array into halves, sorts them recursively, and merges the sorted halves. Time complexity: O(n log n).",
+  "Category: Sorting Algorithms\nContent: Quick Sort is another divide-and-conquer algorithm that selects a pivot, partitions the array into elements less than and greater than the pivot, then recursively sorts the partitions. Time complexity: O(n log n) on average.",
+  "Category: Searching Algorithms\nContent: Linear Search goes through each element of a list one by one to find a target value. It is simple but inefficient for large datasets. Time complexity: O(n).",
+  "Category: Searching Algorithms\nContent: Binary Search is an efficient algorithm for sorted arrays. It repeatedly divides the search interval in half to locate a target. Time complexity: O(log n).",
+  "Category: Searching Algorithms\nContent: Binary Search only works on sorted arrays. If the list is unsorted, you must sort it first before using this method."
 ]

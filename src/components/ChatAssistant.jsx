@@ -1,26 +1,42 @@
-import React, { useState } from "react";
-import { runQuery } from "../../backend/langchainAgent"; // Adjust path if needed
-import searchNotes from "../../backend/tools/searchHelper"; // Adjust path as needed
+import React, { useState, useEffect, useRef } from "react";
+import { runQuery } from "../../backend/langchainAgent";
+import searchNotes from "../../backend/tools/searchHelper";
 
 const ChatAssistant = () => {
   const [messages, setMessages] = useState([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
 
-  // Use searchHelper.js for fallback
-  const fallbackSearch = (query) => {
-    const results = searchNotes(query);
+  // ✅ Auto-scroll to latest message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-    if (results.length === 0) {
-      return "❌ Sorry, I couldn’t find anything helpful from month 3 notes.";
+  // ✅ Highlight matched search terms in fallback
+  const highlight = (text, term) =>
+    text.replace(new RegExp(`(${term})`, "gi"), "**$1**");
+
+  const fallbackSearch = async (query) => {
+    try {
+      const results = await searchNotes(query);
+
+      if (!Array.isArray(results) || results.length === 0) {
+        return "❌ Sorry, I couldn’t find anything helpful from month 3 notes.";
+      }
+
+      return results
+        .map((section) => {
+          const bullets = (section.matches || [])
+            .map((m) => `- ${highlight(m, query)}`)
+            .join("\n");
+          return `📘 ${section.category}:\n${bullets}`;
+        })
+        .join("\n\n");
+    } catch (err) {
+      console.error("❌ fallbackSearch error:", err);
+      return "⚠️ An error occurred while trying to search the notes.";
     }
-
-    return results
-      .map((section) => {
-        const formatted = section.matches.map((m) => `- ${m}`).join("\n");
-        return `📚 ${section.category}:\n${formatted}`;
-      })
-      .join("\n\n");
   };
 
   const handleSend = async () => {
@@ -32,25 +48,27 @@ const ChatAssistant = () => {
     setLoading(true);
 
     try {
-      let reply = await runQuery(query);
+      const response = await runQuery(query);
+      let reply = "";
 
-      // Fallback if no content returned
-      if (!reply || reply.trim() === "") {
-        reply = fallbackSearch(query);
+      if (typeof response === "string") {
+        reply = response.trim();
+      } else if (response && typeof response.content === "string") {
+        reply = response.content.trim();
       }
 
-      const botMessage = { role: "bot", text: reply };
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      console.error("Langchain runQuery error:", error);
-      const fallback = fallbackSearch(query);
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", text: fallback },
-      ]);
-    }
+      if (!reply) {
+        reply = await fallbackSearch(query);
+      }
 
-    setLoading(false);
+      setMessages((prev) => [...prev, { role: "bot", text: reply }]);
+    } catch (err) {
+      console.error("Langchain runQuery error:", err);
+      const fallback = await fallbackSearch(query);
+      setMessages((prev) => [...prev, { role: "bot", text: fallback }]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -58,7 +76,7 @@ const ChatAssistant = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-8 p-4 bg-white/30 rounded-xl shadow-lg backdrop-blur-lg">
+    <div className="w-full max-w-2xl mx-auto mt-10 p-4 bg-white/30 rounded-xl shadow-lg backdrop-blur-lg">
       <div className="h-96 overflow-y-auto space-y-3 px-2">
         {messages.map((msg, i) => (
           <div
@@ -72,7 +90,10 @@ const ChatAssistant = () => {
             {msg.text}
           </div>
         ))}
-        {loading && <div className="text-gray-500 text-sm">🤖 Typing...</div>}
+        {loading && (
+          <div className="text-gray-500 text-sm animate-pulse">🤖 Typing...</div>
+        )}
+        <div ref={messagesEndRef} />
       </div>
 
       <div className="flex gap-2 mt-4">
@@ -81,7 +102,7 @@ const ChatAssistant = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyPress}
-          placeholder="Ask me about Month 3 notes..."
+          placeholder="Ask me anything..."
           className="flex-1 px-4 py-2 rounded-lg bg-white text-sm outline-none"
         />
         <button

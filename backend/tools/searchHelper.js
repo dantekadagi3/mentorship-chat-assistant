@@ -1,42 +1,61 @@
-import notes from "../data/month3_notes.json";
+// searchHelper.js
+import Fuse from "fuse.js";
 
-// Enhanced search function
-const searchNotes = (query) => {
-  const lowerQuery = query.toLowerCase();
-  const results = [];
+let cachedData = null;
+let fuse = null;
 
-  notes.interviewPreparation.forEach((section) => {
-    const result = {
-      category: section.category,
-      matches: [],
-    };
+const loadNotes = async () => {
+  if (cachedData) return cachedData;
 
-    // Search in 'items'
-    if (section.items) {
-      section.items.forEach((item) => {
-        if (item.toLowerCase().includes(lowerQuery)) {
-          result.matches.push(item);
-        }
-      });
-    }
+  const res = await fetch("/month3_notes.json");
+  const data = await res.json();
 
-    // Search in 'questions'
-    if (section.questions) {
-      section.questions.forEach((qa) => {
-        if (
-          qa.question.toLowerCase().includes(lowerQuery) ||
-          qa.guidance.toLowerCase().includes(lowerQuery)
-        ) {
-          result.matches.push(`Q: ${qa.question}\nA: ${qa.guidance}`);
-        }
-      });
-    }
+  if (!Array.isArray(data)) {
+    console.warn("❗ Expected an array in month3_notes.json");
+    return [];
+  }
 
-    if (result.matches.length > 0) {
-      results.push(result);
+  cachedData = data;
+
+  // ✅ Setup Fuse.js for fuzzy searching
+  fuse = new Fuse(data, {
+    keys: ["Content", "Q", "A", "Category"],
+    threshold: 0.4, // adjust for stricter/looser matching
+    includeScore: true,
+  });
+
+  return data;
+};
+
+const searchNotes = async (query) => {
+  await loadNotes(); // ensure data is loaded and fuse initialized
+
+  if (!fuse) {
+    console.error("❌ Fuse instance not initialized.");
+    return [];
+  }
+
+  const results = fuse.search(query).slice(0, 5); // top 5 best matches
+
+  if (results.length === 0) return [];
+
+  const grouped = {};
+
+  results.forEach(({ item }) => {
+    const category = item.Category || "Uncategorized";
+    if (!grouped[category]) grouped[category] = [];
+
+    if (item.Q && item.A) {
+      grouped[category].push(`Q: ${item.Q}\nA: ${item.A}`);
+    } else if (item.Content) {
+      grouped[category].push(item.Content);
     }
   });
 
-  return results;
+  return Object.entries(grouped).map(([category, matches]) => ({
+    category,
+    matches,
+  }));
 };
+
 export default searchNotes;
